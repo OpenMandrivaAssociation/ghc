@@ -20,6 +20,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	gcc
 BuildRequires:	haddock >= 0.8
 BuildRequires:	happy, alex
+BuildRequires:	libxslt-proc
 #BuildRequires: openal-devel
 Requires:	gcc
 Epoch:		0
