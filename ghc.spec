@@ -2,13 +2,13 @@
 %define debug_package          %{nil}
 
 Name:		ghc
-Version:	6.6
-Release:	%mkrel 5
+Version:	6.6.1
+Release:	%mkrel 1
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
 Source:		http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.bz2
-Source1:    http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src-extralibs.tar.bz2
+Source1:	http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src-extralibs.tar.bz2
 # fix installation pat on x86_64
 Patch1:		ghc-lib64.patch
 URL:		http://haskell.org/ghc/
@@ -25,8 +25,8 @@ Requires:	gcc
 Epoch:		0
 # this is not an error, you need need to link application
 Requires: gmp-devel
-provides: haskell-compiler
-provides: haskell-interactive
+Provides: haskell-compiler = %{version}
+Provides: haskell-interactive = %{version}
 BuildRequires: haskell-macros >= 6.0
 
 %description
@@ -81,15 +81,13 @@ interfaces (C, C++, etc).
 ./configure --prefix=%{_prefix} --libdir=%{_libdir} --disable-alut
 
 make  CFLAGS="$RPM_OPT_FLAGS"
-#make all html
-
-make datadir=$RPM_BUILD_DIR/ghc-%{version} SGMLDocWays="html" install-docs
-#make datadir=$RPM_BUILD_ROOT%{_docdir}/ghc-%{version} SGMLDocWays="html" install-docs
+make html
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 make prefix=$RPM_BUILD_ROOT%{_prefix} libdir=$RPM_BUILD_ROOT%{_libdir}/ghc-%{version} install
+make datadir=`pwd` mandir=${RPM_BUILD_ROOT}%{_mandir} install-docs                                           
 
 SRC_TOP=$PWD
 rm -f rpm-*.files
@@ -122,6 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc ANNOUNCE LICENSE README
 %doc HACKING
 %{?_cabal_rpm_files}
+%{_mandir}/man1/*
 
 %files -n ghc-prof -f rpm-prof.files
 %defattr(-,root,root,-)
