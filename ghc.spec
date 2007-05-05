@@ -104,10 +104,19 @@ perl -pi -e "s|\.%{_prefix}|%{_prefix}|" rpm-*.files
 mkdir -p %buildroot%_cabal_pkg_deps_dir
 touch %buildroot%_cabal_pkg_deps_dir/{provides,requires}
 
+# Haskell magic provides
 ./utils/ghc-pkg/ghc-pkg -f ./driver/package.conf list --simple-output | \
-    grep ghc-%{version} | \
     perl -p -e 's/ *([\w-]*)-([^-, ]*)[, ]*/haskell($1) = $2\n/g' | sort | uniq \
     > %buildroot%_cabal_pkg_deps_dir/provides
+
+%check
+
+grep haskell98 %buildroot%_cabal_pkg_deps_dir/provides >/dev/null
+if [ $? ne 0 ] ; then
+    echo "I cannot find basic provides in %buildroot%_cabal_pkg_deps_dir/provides"
+    echo "Please check..."
+    exit 1
+fi 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -128,5 +137,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files doc
 %doc html
-
 
