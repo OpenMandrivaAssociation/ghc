@@ -3,7 +3,7 @@
 
 Name:		ghc
 Version:	6.6.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
