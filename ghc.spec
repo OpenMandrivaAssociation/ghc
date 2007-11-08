@@ -9,8 +9,6 @@ License:	BSD style
 Group:		Development/Other
 Source:		http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.bz2
 Source1:	http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src-extralibs.tar.bz2
-# fix installation pat on x86_64
-Patch1:		ghc-lib64.patch
 URL:		http://haskell.org/ghc/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:	gmp-devel, readline-devel, flex, perl, docbook-utils
@@ -68,10 +66,6 @@ interfaces (C, C++, etc).
 
 %prep
 %setup -q -b 1 -n ghc-%{version}
-
-%if "%{_lib}" != "lib"
-%patch1 
-%endif
 
 %build
 #%ifarch x86_64
