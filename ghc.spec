@@ -10,6 +10,7 @@ Group:		Development/Other
 Source:		http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.bz2
 Source1:	http://www.haskell.org/ghc/dist/%{version}/ghc-%{version}-src-extralibs.tar.bz2
 URL:		http://haskell.org/ghc/
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:	gmp-devel, readline-devel, flex, perl, docbook-utils
 BuildRequires:	ghc
 BuildRequires:	ncurses-devel
