@@ -14,7 +14,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:	gmp-devel, readline-devel, flex, perl, docbook-utils
 BuildRequires:	ghc
 BuildRequires:	ncurses-devel
-#BuildRequires:	libMesaglut-devel
+#BuildRequires:	mesaglut-devel
 BuildRequires:	gcc
 BuildRequires:	haddock >= 0.8
 BuildRequires:	happy, alex
