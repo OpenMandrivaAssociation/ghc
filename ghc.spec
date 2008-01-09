@@ -3,7 +3,7 @@
 
 Name:		ghc
 Version:	6.8.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
@@ -66,6 +66,9 @@ interfaces (C, C++, etc).
 
 %prep
 %setup -q -b 1 -n ghc-%{version}
+
+# Fix path for module
+perl -pi -e 's/"lib"/"%_lib"/' libraries/Cabal/Distribution/Simple/InstallDirs.hs
 
 %build
 #%ifarch x86_64
