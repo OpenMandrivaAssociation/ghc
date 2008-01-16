@@ -2,8 +2,8 @@
 %define debug_package          %{nil}
 
 Name:		ghc
-Version:	6.8.1
-Release:	%mkrel 2
+Version:	6.8.2
+Release:	%mkrel 1
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
