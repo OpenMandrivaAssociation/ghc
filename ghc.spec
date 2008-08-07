@@ -2,8 +2,8 @@
 %define debug_package          %{nil}
 
 Name:		ghc
-Version:	6.8.2
-Release:	%mkrel 3
+Version:	6.8.3
+Release:	%mkrel 1
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
@@ -23,10 +23,10 @@ BuildRequires:	libxslt-proc, docbook-style-xsl
 Requires:	gcc
 Epoch:		0
 # this is not an error, you need need to link application
-Requires: gmp-devel
-Provides: haskell-compiler = %{version}
-Provides: haskell-interactive = %{version}
-BuildRequires: haskell-macros >= 6.0
+Requires:	gmp-devel
+Provides:	haskell-compiler = %{version}
+Provides:	haskell-interactive = %{version}
+BuildRequires:	haskell-macros >= 6.0
 
 %description
 GHC is a state-of-the-art programming suite for Haskell, a purely
@@ -78,24 +78,24 @@ perl -pi -e 's/"lib"/"%_lib"/' libraries/Cabal/Distribution/Simple/InstallDirs.h
 # disable OpenAL : it breaks build :-(  --disable-openal
 ./configure --prefix=%{_prefix} --libdir=%{_libdir} --disable-alut
 
-%make  CFLAGS="$RPM_OPT_FLAGS"
+%make  CFLAGS="%{optflags}"
 make html
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-make DESTDIR=${RPM_BUILD_ROOT} \
+make DESTDIR=%{buildroot} \
     install
 
 echo %{_docdir}
 
-make DESTDIR=${RPM_BUILD_ROOT} \
+make DESTDIR=%{buildroot} \
     docdir=%{_docdir}/%{name} \
     mandir=%{_mandir} install-docs
 
 SRC_TOP=$PWD
 rm -f rpm-*.files
-( cd $RPM_BUILD_ROOT
+( cd %{buildroot}
   find .%{_libdir} \( -type f \( -name '*.p_hi' -o -name '*_p.a' \) -fprint $SRC_TOP/rpm-prof.files \) -o \( -type f -not -name 'package.conf' -fprint $SRC_TOP/rpm-ghc.files \)
   sed -i '/%{_lib}$/d' $SRC_TOP/rpm-ghc.files
 )
@@ -124,7 +124,7 @@ if [ $? -ne 0 ] ; then
 fi 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files -f rpm-ghc.files
 %defattr(-,root,root,-)
