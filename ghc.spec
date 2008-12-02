@@ -2,7 +2,7 @@
 %define debug_package          %{nil}
 
 Name:		ghc
-Version:	6.8.3
+Version:	6.10.1
 Release:	%mkrel 1
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
@@ -16,7 +16,7 @@ BuildRequires:	ghc
 BuildRequires:	ncurses-devel
 #BuildRequires:	mesaglut-devel
 BuildRequires:	gcc
-BuildRequires:	haddock >= 0.8
+#BuildRequires:	haddock >= 0.8
 BuildRequires:	happy, alex
 BuildRequires:	libxslt-proc, docbook-style-xsl
 #BuildRequires: openal-devel
@@ -85,6 +85,7 @@ make html
 rm -rf %{buildroot}
 
 make DESTDIR=%{buildroot} \
+    "DO_NOT_INSTALL=pwd installPackage haddock" \
     install
 
 echo %{_docdir}
@@ -108,8 +109,9 @@ mkdir -p %buildroot%_cabal_pkg_deps_dir
 touch %buildroot%_cabal_pkg_deps_dir/{provides,requires}
 
 # Haskell magic provides
-./utils/ghc-pkg/ghc-pkg-inplace \
-    -f ./driver/package.conf list --simple-output \
+./utils/ghc-pkg/dist-install/build/ghc-pkg/ghc-pkg \
+    list --simple-output \
+    --global-conf=./inplace-datadir/package.conf \
     | perl -p -e 's/ *([\w-]*)-([^-, ]*)[, ]*/haskell($1) = $2\n/g' \
     | sort | uniq \
     > %buildroot%_cabal_pkg_deps_dir/provides
