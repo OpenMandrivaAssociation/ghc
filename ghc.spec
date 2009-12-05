@@ -3,7 +3,7 @@
 
 Name:		ghc
 Version:	6.10.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Glasgow Haskell Compilation system
 License:	BSD style
 Group:		Development/Other
@@ -26,6 +26,7 @@ Epoch:		0
 Requires:	gmp-devel
 Provides:	haskell-compiler = %{version}
 Provides:	haskell-interactive = %{version}
+Obsoletes:	haskell-filepath < 1.1.0.2
 BuildRequires:	haskell-macros >= 6.0
 
 %description
