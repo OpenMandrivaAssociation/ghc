@@ -1,3 +1,2 @@
 sources:
-  "ghc-6.10.4-src-extralibs.tar.bz2:"	b08b26070f2965122662d035c602536ae9aafbb8
-  "ghc-6.10.4-src.tar.bz2:"	0566858b409066d98da70de5adb9a7030d0df5dc
+  ghc-7.6.1-src.tar.bz2: d463520febb4ad3c5b7a724584bc5a3354ac1af6

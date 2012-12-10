@@ -1,0 +1,11 @@
+--- ghc-7.6.1/libraries/gen_contents_index.haddockpath	2012-09-04 21:10:15.000000000 +0400
++++ ghc-7.6.1/libraries/gen_contents_index	2012-11-06 16:30:59.838801517 +0400
+@@ -58,7 +58,7 @@ then
+         done
+     done
+ else
+-    HADDOCK=../../../../../../bin/haddock
++    HADDOCK=/usr/bin/haddock
+     # We don't want the GHC API to swamp the index
+     HADDOCK_FILES=`ls -1 ../*/*.haddock | grep -v '/ghc\.haddock' | sort`
+     for HADDOCK_FILE in $HADDOCK_FILES
