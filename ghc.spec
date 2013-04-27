@@ -1,6 +1,6 @@
 Name:           ghc
 Version:        7.6.1
-Release:        7
+Release:        8
 License:        BSD
 Group:          Development/Other
 URL:            http://haskell.org/ghc/
@@ -9,8 +9,8 @@ patch0:         ghc-7.6.1-haddockpath.patch
 patch1:         ghc-7.6.1-fromsuse-use-system-libffi.patch
 Requires:       gcc
 BuildRequires:  update-alternatives
-buildrequires:  alex >= 2.0
-buildrequires:  happy >= 1.15
+#buildrequires:  alex >= 2.0
+#buildrequires:  happy >= 1.15
 buildrequires:  ghc >= 5
 #buildrequires:  docbook-utils
 #buildrequires:  docbook-style-xsl
