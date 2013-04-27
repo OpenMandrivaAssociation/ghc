@@ -1,3 +1,5 @@
+%global ghc_bootstrapping 1
+
 Name:           ghc
 Version:        7.6.1
 Release:        8
@@ -11,7 +13,6 @@ Requires:       gcc
 BuildRequires:  update-alternatives
 #buildrequires:  alex >= 2.0
 #buildrequires:  happy >= 1.15
-buildrequires:  ghc >= 5
 #buildrequires:  docbook-utils
 #buildrequires:  docbook-style-xsl
 buildrequires:  docbook-dtd42-xml
@@ -24,7 +25,12 @@ buildrequires:  readline-devel
 buildrequires:  pkgconfig(glut)
 buildrequires:  dblatex
 buildrequires:  texlive-bibtopic
-buildrequires:  ghc-devel
+
+%if %{undefined ghc_bootstrapping}
+BuildRequires:  ghc-devel
+BuildRequires:	ghc
+%endif
+
 requires:       gmp-devel
 
 Summary:        The Glasgow Haskell Compiler
@@ -116,7 +122,7 @@ export LDFLAGS="-Wl,-z,noexecstack"
 
 autoreconf -vif
 ./configure --prefix=%{_prefix} --mandir=%{_mandir} --libdir=%{_libdir} \
-	--with-system-libffi
+	--with-system-libffi --with-gcc=%{_bindir}/gcc
 
 # Don't install these tools, we'll use update-alternatives below.
 touch mk/build.mk
