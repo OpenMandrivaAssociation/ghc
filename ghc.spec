@@ -6,7 +6,7 @@ License:	BSD
 Group:		Development/Other
 Url:		http://haskell.org/ghc/
 Source0:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.bz2
-Patch0:		ghc-7.6.1-haddockpath.patch
+Patch0:		ghc-7.6.3-haddockpath.patch
 Patch1:		ghc-7.6.1-fromsuse-use-system-libffi.patch
 Requires:	gcc
 BuildRequires:	alex >= 2.0
