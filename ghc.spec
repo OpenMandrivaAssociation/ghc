@@ -97,7 +97,6 @@ They should be installed when GHC's profiling subsystem is needed.
 Summary:	Documentation for the Glasgow Haskell Compiler
 Group:		Books/Computer books
 Requires:	%{name} = %{EVRD}
-Requires:	locales-doc
 
 %description doc
 Documentation for the Glasgow Haskell Compiler.
