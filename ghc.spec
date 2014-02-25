@@ -15,6 +15,7 @@ BuildRequires:	docbook-dtd42-xml
 BuildRequires:	ghc
 BuildRequires:	happy >= 1.15
 BuildRequires:	texlive
+BuildRequires:	texlive-bibtopic
 BuildRequires:	update-alternatives
 BuildRequires:	ghc-devel
 BuildRequires:	gmp-devel
