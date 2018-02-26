@@ -1,5 +1,4 @@
 sources:
-  ghc-7.6.3-src.tar.bz2: 8938e1ef08b37a4caa071fa169e79a3001d065ff
   ghc-8.2.2-aarch64-deb8-linux.tar.xz: 36b29a3f02d76b7c6d8ced92d7f831e502e3cc01
   ghc-8.2.2-armv7-deb8-linux.tar.xz: 7d734275c6486f440f31c4026f220c2d7f64a753
   ghc-8.2.2-i386-deb8-linux.tar.xz: 0bb8d532e7d7967a1cc4941cb4fa1fa62d665bc9
