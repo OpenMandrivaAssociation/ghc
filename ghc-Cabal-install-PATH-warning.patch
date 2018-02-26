@@ -1,0 +1,20 @@
+--- ghc-8.2.2/libraries/Cabal/Cabal/Distribution/Simple/Install.hs~	2017-05-05 16:51:43.000000000 +0200
++++ ghc-8.2.2/libraries/Cabal/Cabal/Distribution/Simple/Install.hs	2018-01-23 23:05:47.047081056 +0100
+@@ -36,7 +36,7 @@
+ import Distribution.Simple.Utils
+          ( createDirectoryIfMissingVerbose
+          , installDirectoryContents, installOrdinaryFile, isInSearchPath
+-         , die', info, noticeNoWrap, warn, matchDirFileGlob )
++         , die', info, noticeNoWrap, warn, matchDirFileGlob, debug )
+ import Distribution.Simple.Compiler
+          ( CompilerFlavor(..), compilerFlavor )
+ import Distribution.Simple.Setup
+@@ -215,7 +215,7 @@
+                       ++ " in " ++ binPref)
+     inPath <- isInSearchPath binPref
+     when (not inPath) $
+-      warn verbosity ("The directory " ++ binPref
++      debug verbosity ("The directory " ++ binPref
+                       ++ " is not in the system search path.")
+     case compilerFlavor (compiler lbi) of
+       GHC   -> GHC.installExe   verbosity lbi binPref buildPref progFix pkg_descr exe

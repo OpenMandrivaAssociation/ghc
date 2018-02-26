@@ -1,26 +1,49 @@
 Summary:	The Glasgow Haskell Compiler
 Name:		ghc
-Version:	7.6.3
-Release:	2
+Version:	8.2.2
+Release:	1
 License:	BSD
 Group:		Development/Other
 Url:		http://haskell.org/ghc/
-Source0:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.bz2
-Patch0:		ghc-7.6.3-haddockpath.patch
-Patch1:		ghc-7.6.1-fromsuse-use-system-libffi.patch
+Source0:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.xz
+Source1:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-testsuite.tar.xz
+# Ugly, but GHC requires itself to build. Since we can't rely on
+# a previous package, got to bundle upstream's binary packages for now.
+Source10:	https://downloads.haskell.org/~ghc/%{version}/ghc-%{version}-i386-deb8-linux.tar.xz
+Source11:	https://downloads.haskell.org/~ghc/%{version}/ghc-%{version}-x86_64-deb8-linux-dwarf.tar.xz
+Source12:	https://downloads.haskell.org/~ghc/%{version}/ghc-%{version}-armv7-deb8-linux.tar.xz
+Source13:	https://downloads.haskell.org/~ghc/%{version}/ghc-%{version}-aarch64-deb8-linux.tar.xz
+# RPM integration...
+Source20:	haskell.attr
+Source21:	haskelldeps.sh
+Source22:	haskell.macros
+
+Patch0:		ghc-8.2.2-compile.patch
+Patch1:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/D4159.patch
+Patch2:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/ghc-Cabal-install-PATH-warning.patch
+Patch3:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/ghc-Debian-no-missing-haddock-file-warning.patch
+Patch4:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/ghc-Debian-reproducible-tmp-names.patch
+Patch5:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/ghc-Debian-x32-use-native-x86_64-insn.patch
+Patch6:		https://src.fedoraproject.org/rpms/ghc/raw/master/f/ghc-gen_contents_index-haddock-path.patch
+# FIXME we shouldn't do this, it's a workaround for building docs
+# barfing. Should fix it properly at some point.
+Patch7:		ghc-8.2.2-disable-docs.patch
 Requires:	gcc
-BuildRequires:	alex >= 2.0
-BuildRequires:	dblatex
+#BuildRequires:	alex >= 2.0
+#BuildRequires:	dblatex
 BuildRequires:	docbook-dtd42-xml
-BuildRequires:	ghc
-BuildRequires:	happy >= 1.15
+#BuildRequires:	ghc
+#BuildRequires:	happy >= 1.15
 BuildRequires:	texlive
+BuildRequires:	texlive-xetex
 BuildRequires:	texlive-bibtopic
 BuildRequires:	update-alternatives
-BuildRequires:	ghc-devel
+#BuildRequires:	ghc-devel
 BuildRequires:	gmp-devel
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(glut)
+BuildRequires:	python-sphinx
+BuildRequires:	perl
 Requires:	gmp-devel
 
 %description
@@ -57,6 +80,11 @@ Haskell home page at http://haskell.org/.
 %{_bindir}/runghc
 %{_bindir}/runghc-%{version}
 %{_bindir}/runhaskell
+
+%{_rpmconfigdir}/fileattrs/haskell.attr
+%{_rpmconfigdir}/haskelldeps.sh
+%{_sysconfdir}/rpm/macros.d/haskell.macros
+
 
 %post
 # Alas, GHC, Hugs and nhc all come with different set of tools in addition to
@@ -102,7 +130,6 @@ Requires:	%{name} = %{EVRD}
 Documentation for the Glasgow Haskell Compiler.
 
 %files doc
-%doc docs/comm
 %{_docdir}/%{name}
 
 #----------------------------------------------------------------------------
@@ -122,30 +149,58 @@ except the ghc library, which is installed by the toplevel ghc metapackage.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%patch0 -p1 -b .haddockpath
-%patch1 -p1 -b .use-system-libffi
+%setup -q -b1
+%apply_patches
+
+%ifarch %{ix86}
+tar xf %{S:10}
+%else
+%ifarch x86_64
+tar xf %{S:11}
+%else
+%ifarch %{arm}
+tar xf %{S:12}
+%else
+%ifarch %{armx}
+tar xf %{S:13}
+%else
+echo "ghc needs itself to build. Please find a binary somewhere or port."
+exit 1
+%endif
+%endif
+%endif
+%endif
+
 
 %build
+TOP="$(pwd)"
+cd %{name}-%{version}
+./configure --prefix=${TOP}/prebuilt
+make install
+cd ..
+rm -rf %{name}-%{version}
+export PATH=${TOP}/prebuilt/bin:${PATH}
+
 # simulate old texlive behavior for processing backslashes in urls in the
 # docbooks. see f.e.: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=563659
 export DBLATEX_OPTS="--param=texlive.version=2009"
 # makeindex (called by dblatex) by default does not work with absolute paths
 export openout_any=r
+export CFLAGS="%{optflags}"
 # executable-stack rpmlint error
-export LDFLAGS="-Wl,-z,noexecstack"
+export LDFLAGS="%{optflags} -Wl,-z,noexecstack"
 
 autoreconf -vif
 ./configure \
 	--prefix=%{_prefix} \
 	--mandir=%{_mandir} \
 	--libdir=%{_libdir} \
-	--with-system-libffi
+	--with-system-libffi \
+	--disable-ld-override
 
-# Don't install these tools, we'll use update-alternatives below.
-touch mk/build.mk
-echo "NO_INSTALL_RUNHASKELL=YES" >>mk/build.mk
-echo "NO_INSTALL_HSC2HS=YES" >>mk/build.mk
+cat >mk/build.mk <<'EOF'
+BuildFlavour=quick-llvm
+EOF
 
 %make
 
@@ -164,6 +219,19 @@ rm -rf %{buildroot}%{_docdir}/packages
 mv %{buildroot}%{_prefix}/bin/hsc2hs %{buildroot}%{_prefix}/bin/hsc2hs-%{version}
 ln -s hsc2hs-%{version} %{buildroot}%{_prefix}/bin/hsc2hs-ghc
 ln -s hsc2hs-%{version} %{buildroot}%{_prefix}/bin/hsc2hs
+
+# RPM integration
+install -m644 %{S:20} -D %{buildroot}%{_rpmconfigdir}/fileattrs/haskell.attr
+install -m755 %{S:21} -D %{buildroot}%{_rpmconfigdir}/haskelldeps.sh
+install -m644 %{S:22} -D %{buildroot}%{_sysconfdir}/rpm/macros.d/haskell.macros
+
+# FIXME continued workaround for not being able to build docs -- let's just steal
+# them from the prebuilt version for now...
+mkdir -p %{buildroot}%{_mandir}
+cp -a prebuilt/share/man/man1 %{buildroot}%{_mandir}
+mkdir -p %{buildroot}%{_docdir}/%{name}/html
+cp -a prebuilt/share/doc/%{name}-%{version}/html/users_guide %{buildroot}%{_docdir}/%{name}/html/
+cp -a prebuilt/share/doc/%{name}-%{version}/users_guide.pdf %{buildroot}%{_docdir}/%{name}/
 
 # generate the file list for lib/ _excluding_ all files needed for profiling
 # only

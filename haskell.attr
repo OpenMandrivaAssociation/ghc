@@ -1,0 +1,3 @@
+%__haskell_provides	%{_rpmconfigdir}/haskelldeps.sh --provides
+%__haskell_requires	%{_rpmconfigdir}/haskelldeps.sh --requires
+%__haskell_path		^(%{_datadir}/haskell-deps/[^/]*/(provides|requires))$

@@ -1,0 +1,14 @@
+--- ghc-8.2.2/aclocal.m4.omv~	2018-02-26 20:29:47.663611593 +0100
++++ ghc-8.2.2/aclocal.m4	2018-02-26 20:30:48.142553482 +0100
+@@ -297,9 +297,8 @@ AC_DEFUN([FPTOOLS_SET_HASKELL_PLATFORM_V
+     AC_COMPILE_IFELSE(
+         [AC_LANG_PROGRAM([], [__asm__ (".subsections_via_symbols");])],
+         [AC_MSG_RESULT(yes)
+-         HaskellHaveSubsectionsViaSymbols=True
+-         AC_DEFINE([HAVE_SUBSECTIONS_VIA_SYMBOLS],[1],
+-                   [Define to 1 if Apple-style dead-stripping is supported.])
++         HaskellHaveSubsectionsViaSymbols=False
++         AC_MSG_RESULT(false positive)
+         ],
+         [HaskellHaveSubsectionsViaSymbols=False
+          AC_MSG_RESULT(no)])

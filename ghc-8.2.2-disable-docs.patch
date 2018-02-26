@@ -1,0 +1,10 @@
+--- ghc-8.2.2/ghc.mk.omv~	2018-02-26 21:56:25.631859467 +0100
++++ ghc-8.2.2/ghc.mk	2018-02-26 21:56:28.517860209 +0100
+@@ -691,7 +691,6 @@ BUILD_DIRS += utils/hpc
+ BUILD_DIRS += utils/runghc
+ BUILD_DIRS += ghc
+ BUILD_DIRS += utils/mkUserGuidePart
+-BUILD_DIRS += docs/users_guide
+ BUILD_DIRS += utils/count_lines
+ BUILD_DIRS += utils/compare_sizes
+ BUILD_DIRS += iserv
