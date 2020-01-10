@@ -150,7 +150,7 @@ except the ghc library, which is installed by the toplevel ghc metapackage.
 
 %prep
 %setup -q -b1
-%apply_patches
+%autopatch -p1
 
 %ifarch %{ix86}
 tar xf %{S:10}
