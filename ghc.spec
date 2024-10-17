@@ -4,7 +4,7 @@ Version:	8.2.2
 Release:	1
 License:	BSD
 Group:		Development/Other
-Url:		http://haskell.org/ghc/
+Url:		https://haskell.org/ghc/
 Source0:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-src.tar.xz
 Source1:	http://haskell.org/ghc/dist/%{version}/ghc-%{version}-testsuite.tar.xz
 # Ugly, but GHC requires itself to build. Since we can't rely on
