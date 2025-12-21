@@ -31,6 +31,11 @@ Patch7:		ghc-8.2.2-disable-docs.patch
 Requires:	gcc
 #BuildRequires:	alex >= 2.0
 #BuildRequires:	dblatex
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	docbook-dtd42-xml
 #BuildRequires:	ghc
 #BuildRequires:	happy >= 1.15
